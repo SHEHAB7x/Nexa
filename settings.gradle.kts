@@ -19,6 +19,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "compose1"
+rootProject.name = "NewsApp"
 include(":app")
  
+
