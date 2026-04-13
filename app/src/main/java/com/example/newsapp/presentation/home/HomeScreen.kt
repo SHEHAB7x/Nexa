@@ -43,12 +43,10 @@ fun HomeScreen(
             .background(White),
         contentPadding = PaddingValues(bottom = 16.dp)
     ) {
-        // ── Search Bar ──
         item {
             SearchBarRow(onSearchClick = onSearchClick)
         }
 
-        // ── Latest News header ──
         item {
             SectionHeader(
                 title    = "Latest News",
@@ -56,7 +54,6 @@ fun HomeScreen(
             )
         }
 
-        // ── Headlines horizontal scroll ──
         item {
             if (uiState.isHeadlinesLoading) {
                 Box(
@@ -82,7 +79,6 @@ fun HomeScreen(
             }
         }
 
-        // ── Category buttons horizontal scroll ──
         item {
             Spacer(modifier = Modifier.height(20.dp))
             LazyRow(
@@ -100,7 +96,6 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        // ── Category articles vertical list ──
         if (uiState.isCategoryLoading) {
             item {
                 Box(
