@@ -1,4 +1,8 @@
 package com.example.newsapp.presentation.detail
 
-class ArticleDetailScreen {
+import androidx.compose.runtime.Composable
+
+@Composable
+fun ArticleDetailScreen(){
+
 }
