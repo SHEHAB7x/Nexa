@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -28,6 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.newsapp.domain.model.Article
 import com.example.newsapp.domain.model.NewsCategory
+import com.example.newsapp.domain.model.Source
 import com.example.newsapp.presentation.theme.*
 
 @Composable
@@ -37,49 +39,56 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    HomeScreenContent(
+        uiState        = uiState,
+        onArticleClick = onArticleClick,
+        onSearchClick  = onSearchClick,
+        onCategorySelected = viewModel::onCategorySelected
+    )
+}
 
+@Composable
+fun HomeScreenContent(
+    uiState: HomeUiState,
+    onArticleClick: (String) -> Unit,
+    onSearchClick: () -> Unit,
+    onCategorySelected: (NewsCategory) -> Unit
+) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(White),
         contentPadding = PaddingValues(bottom = 16.dp)
     ) {
-        item {
-            SearchBarRow(onSearchClick = onSearchClick)
-        }
-
+        item { SearchBarRow(onSearchClick = onSearchClick) }
         item {
             SectionHeader(
                 title    = "Latest News",
                 onSeeAll = {}
             )
         }
-
         item {
             if (uiState.isHeadlinesLoading) {
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp),
+                    modifier         = Modifier.fillMaxWidth().height(200.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator(color = Primary)
                 }
             } else {
                 LazyRow(
-                    contentPadding    = PaddingValues(horizontal = 16.dp),
+                    contentPadding        = PaddingValues(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(uiState.headlines) { article ->
                         HeadlineCard(
-                            article  = article,
-                            onClick  = { onArticleClick(article.url) }
+                            article = article,
+                            onClick = { onArticleClick(article.url) }
                         )
                     }
                 }
             }
         }
-
         item {
             Spacer(modifier = Modifier.height(20.dp))
             LazyRow(
@@ -88,21 +97,18 @@ fun HomeScreen(
             ) {
                 items(categories) { category ->
                     CategoryChip(
-                        category    = category,
-                        isSelected  = uiState.selectedCategory == category,
-                        onClick     = { viewModel.onCategorySelected(category) }
+                        category   = category,
+                        isSelected = uiState.selectedCategory == category,
+                        onClick    = { onCategorySelected(category) }
                     )
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
         }
-
         if (uiState.isCategoryLoading) {
             item {
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(300.dp),
+                    modifier         = Modifier.fillMaxWidth().height(300.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator(color = Primary)
@@ -114,13 +120,37 @@ fun HomeScreen(
                     article = article,
                     onClick = { onArticleClick(article.url) }
                 )
-                Divider(
+                HorizontalDivider(
                     color     = LightGray,
                     thickness = 1.dp,
                     modifier  = Modifier.padding(horizontal = 16.dp)
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun HomeScreenPreview() {
+    NewsAppTheme {
+        HomeScreenContent(
+            uiState = HomeUiState(
+                headlines = listOf(fakeArticle, fakeArticle, fakeArticle),
+                categoryArticles = listOf(
+                    fakeArticle,
+                    fakeArticle,
+                    fakeArticle,
+                    fakeArticle
+                ),
+                selectedCategory   = NewsCategory.Apple,
+                isHeadlinesLoading = false,
+                isCategoryLoading  = false
+            ),
+            onArticleClick     = {},
+            onSearchClick      = {},
+            onCategorySelected = {}
+        )
     }
 }
 
@@ -152,7 +182,7 @@ fun SearchBarRow(onSearchClick: () -> Unit) {
                     modifier           = Modifier.size(20.dp)
                 )
                 Text(
-                    text  = "Dogecoin to the Moon...",
+                    text  = "Search...",
                     color = MediumGray,
                     fontSize = 14.sp
                 )
@@ -167,8 +197,8 @@ fun SearchBarRow(onSearchClick: () -> Unit) {
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                imageVector        = Icons.Default.Search,
-                contentDescription = "Filter",
+                imageVector        = Icons.Default.Notifications,
+                contentDescription = "Notification",
                 tint               = White,
                 modifier           = Modifier.size(20.dp)
             )
@@ -331,3 +361,15 @@ fun ArticleListItem(
         }
     }
 }
+
+private val fakeArticle = Article(
+    source      = Source(id = null, name = "BBC News"),
+    author      = "John Doe",
+    title       = "Crypto investors should be prepared to lose all their money",
+    description = "The Bank of England governor says investors should be ready.",
+    url         = "https://example.com",
+    imageUrl    = null,
+    publishedAt = "2026-04-07",
+    content     = null,
+    isSaved     = false
+)
