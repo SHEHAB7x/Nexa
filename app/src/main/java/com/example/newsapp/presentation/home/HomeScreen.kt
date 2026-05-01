@@ -3,6 +3,7 @@ package com.example.newsapp.presentation.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -240,7 +241,7 @@ fun HeadlineCard(
 ) {
     Card(
         modifier = Modifier
-            .width(260.dp)
+            .width(300.dp)
             .height(200.dp)
             .clickable { onClick() },
         shape     = RoundedCornerShape(12.dp),
@@ -310,54 +311,61 @@ fun ArticleListItem(
     article: Article,
     onClick: () -> Unit
 ) {
-    Row(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
+            .height(150.dp)
             .clickable { onClick() }
             .padding(horizontal = 16.dp, vertical = 12.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalAlignment     = Alignment.Top
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(5.dp)
     ) {
-        AsyncImage(
-            model              = article.imageUrl,
-            contentDescription = article.title,
-            contentScale       = ContentScale.Crop,
-            modifier           = Modifier
-                .size(90.dp)
-                .clip(RoundedCornerShape(8.dp))
-        )
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            Text(
-                text       = article.source.name,
-                color      = Primary,
-                fontSize   = 11.sp,
-                fontWeight = FontWeight.SemiBold
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+        ){
+            AsyncImage(
+                model              = article.imageUrl,
+                contentDescription = article.title,
+                contentScale       = ContentScale.Crop,
+                modifier           = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(8.dp))
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.45f))
             )
             Text(
-                text       = article.title,
-                color      = Black,
-                fontSize   = 14.sp,
-                fontWeight = FontWeight.Bold,
-                maxLines   = 2,
-                overflow   = TextOverflow.Ellipsis
+                modifier = Modifier.padding(15.dp),
+                text = article.title,
+                color = White,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold,
             )
-            article.description?.let {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(15.dp)
+                    .align(Alignment.BottomStart),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                article.author?.let {
+                    Text(
+                        text = it,
+                        color = White,
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
                 Text(
-                    text     = it,
-                    color    = MediumGray,
-                    fontSize = 12.sp,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
+                    text = article.publishedAt.take(10),
+                    color = White,
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.SemiBold
                 )
             }
-            Text(
-                text     = article.publishedAt.take(10),
-                color    = MediumGray,
-                fontSize = 11.sp
-            )
         }
     }
 }
