@@ -42,7 +42,6 @@ fun NavGraph(
         composable(Screen.ArticleDetails.route) {
             val article by sharedViewModel.selectedArticle.collectAsState()
             ArticleDetailScreen(
-                articleUrl = article?.url ?: "",
                 article = article,
                 onBackClick = { navController.popBackStack() }
             )

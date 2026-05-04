@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,13 +35,17 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.newsapp.domain.model.Article
+import com.example.newsapp.domain.model.Source
 import com.example.newsapp.presentation.theme.DarkGray
 import com.example.newsapp.presentation.theme.LightGray
+import com.example.newsapp.presentation.theme.NewsAppTheme
 import com.example.newsapp.presentation.theme.Primary
 import com.example.newsapp.presentation.theme.Secondary
 import com.example.newsapp.presentation.theme.White
@@ -48,13 +53,11 @@ import java.net.URLDecoder
 
 @Composable
 fun ArticleDetailScreen(
-    articleUrl : String,
     article: Article?,
     onBackClick : () -> Unit,
     viewModel: ArticleDetailsViewModel = hiltViewModel()
 ){
     val isSaved by viewModel.isSaved.collectAsState()
-    val decodedUrl = URLDecoder.decode(articleUrl, "UTF-8")
 
     LaunchedEffect(article) {
         article?.let {
@@ -73,9 +76,25 @@ fun ArticleDetailScreen(
         return
     }
 
+    ArticleDetailContent(
+        article = article,
+        isSaved = isSaved,
+        onBackClick = onBackClick,
+        onToggleSave = { viewModel.toggleSave() }
+    )
+}
+
+@Composable
+fun ArticleDetailContent(
+    article: Article,
+    isSaved: Boolean,
+    onBackClick: () -> Unit,
+    onToggleSave: () -> Unit
+){
     Box(modifier = Modifier.fillMaxSize().background(White)){
         Column(modifier = Modifier.fillMaxSize()) {
-            Box(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.4f)){
+            Box(modifier = Modifier.fillMaxWidth().fillMaxHeight(.4f))
+            {
                 AsyncImage(
                     model = article.imageUrl,
                     contentDescription = article.description,
@@ -139,12 +158,11 @@ fun ArticleDetailScreen(
                         modifier = Modifier.size(20.dp)
                     )
                 }
-            }
 
+            }
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(White)
+                    .fillMaxHeight(.7f)
                     .verticalScroll(rememberScrollState())
                     .padding(20.dp)
             ) {
@@ -175,32 +193,60 @@ fun ArticleDetailScreen(
                     )
                 }
 
-                Text(
-                    text     = "Read full article →",
-                    color    = Secondary,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.clickable { /* open browser */ }
-                )
-
                 Spacer(modifier = Modifier.height(80.dp))
-            }
 
-            Box(
+
+
+            }
+            Row(
                 modifier = Modifier
-                    .padding(20.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(Primary)
-                    .clickable{ viewModel.toggleSave() },
-                contentAlignment = Alignment.Center
-            ){
-                Icon(
-                    imageVector = if (isSaved) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                    contentDescription = if (isSaved) "Remove from favorites" else "Add to favorites",
-                    tint = White,
-                    modifier = Modifier.size(24.dp)
-                )
+                    .background(White)
+                    .fillMaxHeight()
+                    .padding(end = 40.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(50.dp)
+                        .clip(RoundedCornerShape(50.dp))
+                        .background(Primary)
+                        .clickable{ onToggleSave() },
+                    contentAlignment = Alignment.Center,
+                ){
+                    Icon(
+                        imageVector = if (isSaved) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        contentDescription = if (isSaved) "Remove from favorites" else "Add to favorites",
+                        tint = White,
+                        modifier = Modifier.size(30.dp)
+                    )
+                }
             }
         }
     }
 }
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun ArticleDetailPreview() {
+    NewsAppTheme {
+        ArticleDetailContent(
+            article = fakeArticle,
+            isSaved = false,
+            onBackClick = {},
+            onToggleSave = {}
+        )
+    }
+}
+
+private val fakeArticle = Article(
+    source      = Source(id = null, name = "BBC News"),
+    author      = "John Doe",
+    title       = "Crypto investors should be prepared to lose all their money",
+    description = "The Bank of England governor says investors should be ready.",
+    url         = "https://example.com",
+    imageUrl    = null,
+    publishedAt = "2026-04-07",
+    content     = "null",
+    isSaved     = false
+)
