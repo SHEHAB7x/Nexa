@@ -47,15 +47,15 @@ fun NavGraph(
             )
         }
 
-        /*composable(Screen.Favorites.route) {
+        composable(Screen.Favorites.route) {
             FavoritesScreen(
-                onArticleClick = { url ->
-                    navController.navigate(Screen.ArticleDetail.createRoute(url))
+                onArticleClick = {
+                    navController.navigate(Screen.ArticleDetails.route)
                 }
             )
         }
 
-        composable(Screen.Search.route) {
+        /*composable(Screen.Search.route) {
             SearchScreen(
                 onArticleClick = { url ->
                     navController.navigate(Screen.ArticleDetail.createRoute(url))
