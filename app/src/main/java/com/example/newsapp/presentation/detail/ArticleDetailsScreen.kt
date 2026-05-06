@@ -39,7 +39,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.newsapp.domain.model.Article
 import com.example.newsapp.domain.model.Source
@@ -47,9 +46,7 @@ import com.example.newsapp.presentation.theme.DarkGray
 import com.example.newsapp.presentation.theme.LightGray
 import com.example.newsapp.presentation.theme.NewsAppTheme
 import com.example.newsapp.presentation.theme.Primary
-import com.example.newsapp.presentation.theme.Secondary
 import com.example.newsapp.presentation.theme.White
-import java.net.URLDecoder
 
 @Composable
 fun ArticleDetailScreen(
