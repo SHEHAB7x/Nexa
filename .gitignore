@@ -17,6 +17,8 @@ local.properties
 *.apk
 *.aab
 *.ap_
+*.log
+.kotlin/
 
 app/schemas/
 

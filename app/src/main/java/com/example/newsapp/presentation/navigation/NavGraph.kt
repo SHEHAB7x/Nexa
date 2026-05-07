@@ -55,17 +55,16 @@ fun NavGraph(
             )
         }
 
-        /*composable(Screen.Search.route) {
+        composable(Screen.Search.route) {
             SearchScreen(
-                onArticleClick = { url ->
-                    navController.navigate(Screen.ArticleDetail.createRoute(url))
+                onArticleClick = {
+                    sharedViewModel.setArticle(article = it)
+                    navController.navigate(Screen.ArticleDetails.route)
                 },
                 onBackClick = {
                     navController.popBackStack()
                 }
             )
         }
-
-        */
     }
 }
