@@ -49,7 +49,8 @@ fun NavGraph(
 
         composable(Screen.Favorites.route) {
             FavoritesScreen(
-                onArticleClick = {
+                onArticleClick = { article ->
+                    sharedViewModel.setArticle(article)
                     navController.navigate(Screen.ArticleDetails.route)
                 }
             )

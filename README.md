@@ -4,7 +4,6 @@ A modern Android news application built with **Clean Architecture** and **Jetpac
 
 ## 📸 Screenshots
 <p align="center"> 
-  <img src="screenshots/splash.png" width="20%" />
   <img src="screenshots/home.png" width="20%" />
   <img src="screenshots/search.png" width="20%" />
   <img src="screenshots/details.png" width="20%" />
