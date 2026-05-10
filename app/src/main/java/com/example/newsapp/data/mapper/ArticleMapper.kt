@@ -1,6 +1,8 @@
 package com.example.newsapp.data.mapper
 
 import com.example.newsapp.data.local.entity.ArticleEntity
+import com.example.newsapp.data.local.entity.CategoryArticleEntity
+import com.example.newsapp.data.local.entity.HeadlineEntity
 import com.example.newsapp.data.remote.dto.ArticleDto
 import com.example.newsapp.domain.model.Article
 import com.example.newsapp.domain.model.Source
@@ -61,4 +63,60 @@ fun ArticleEntity.toDomain(): Article =
     )
 
 fun List<ArticleEntity>.entitiesToArticles(): List<Article> =
+    map { it.toDomain() }
+
+fun Article.toHeadlineEntity(): HeadlineEntity =
+    HeadlineEntity(
+        url = url,
+        sourceName = source.name,
+        sourceId = source.id,
+        author = author,
+        title = title,
+        description = description,
+        imageUrl = imageUrl,
+        publishedAt = publishedAt,
+        content = content
+    )
+fun HeadlineEntity.toDomain(): Article =
+    Article(
+        source      = Source(id = sourceId, name = sourceName),
+        author      = author,
+        title       = title,
+        description = description,
+        url         = url,
+        imageUrl    = imageUrl,
+        publishedAt = publishedAt,
+        content     = content
+    )
+
+fun List<HeadlineEntity>.headlinesToArticles(): List<Article> =
+    map { it.toDomain() }
+
+fun Article.toCategoryEntity(category: String): CategoryArticleEntity =
+    CategoryArticleEntity(
+        url         = url,
+        category    = category,
+        sourceName  = source.name,
+        sourceId    = source.id,
+        author      = author,
+        title       = title,
+        description = description,
+        imageUrl    = imageUrl,
+        publishedAt = publishedAt,
+        content     = content
+    )
+
+fun CategoryArticleEntity.toDomain(): Article =
+    Article(
+        source      = Source(id = sourceId, name = sourceName),
+        author      = author,
+        title       = title,
+        description = description,
+        url         = url,
+        imageUrl    = imageUrl,
+        publishedAt = publishedAt,
+        content     = content
+    )
+
+fun List<CategoryArticleEntity>.categoryEntitiesToArticles(): List<Article> =
     map { it.toDomain() }
