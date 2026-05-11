@@ -58,7 +58,7 @@ fun HomeScreenContent(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(White),
+            .background(MaterialTheme.colorScheme.background),
         contentPadding = PaddingValues(bottom = 16.dp)
     ) {
         item { SearchBarRow(onSearchClick = onSearchClick) }
@@ -74,7 +74,7 @@ fun HomeScreenContent(
                     modifier         = Modifier.fillMaxWidth().height(200.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator(color = Primary)
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                 }
             } else {
                 LazyRow(
@@ -112,7 +112,7 @@ fun HomeScreenContent(
                     modifier         = Modifier.fillMaxWidth().height(300.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator(color = Primary)
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                 }
             }
         } else {
@@ -122,7 +122,7 @@ fun HomeScreenContent(
                     onClick = { onArticleClick(article) }
                 )
                 HorizontalDivider(
-                    color     = LightGray,
+                    color     = MaterialTheme.colorScheme.surfaceVariant,
                     thickness = 1.dp,
                     modifier  = Modifier.padding(horizontal = 16.dp)
                 )
@@ -168,7 +168,7 @@ fun SearchBarRow(onSearchClick: () -> Unit) {
             modifier = Modifier
                 .weight(1f)
                 .clip(RoundedCornerShape(24.dp))
-                .background(LightGray)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .clickable { onSearchClick() }
                 .padding(horizontal = 16.dp, vertical = 12.dp)
         ) {
@@ -179,12 +179,12 @@ fun SearchBarRow(onSearchClick: () -> Unit) {
                 Icon(
                     imageVector        = Icons.Default.Search,
                     contentDescription = "Search",
-                    tint               = MediumGray,
+                    tint               = MaterialTheme.colorScheme.outline,
                     modifier           = Modifier.size(20.dp)
                 )
                 Text(
                     text  = "Search...",
-                    color = MediumGray,
+                    color = MaterialTheme.colorScheme.outline,
                     fontSize = 14.sp
                 )
             }
@@ -194,13 +194,13 @@ fun SearchBarRow(onSearchClick: () -> Unit) {
             modifier = Modifier
                 .size(44.dp)
                 .clip(CircleShape)
-                .background(Primary),
+                .background(MaterialTheme.colorScheme.primary),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 imageVector        = Icons.Default.Notifications,
                 contentDescription = "Notification",
-                tint               = White,
+                tint               = MaterialTheme.colorScheme.background,
                 modifier           = Modifier.size(20.dp)
             )
         }
@@ -223,11 +223,11 @@ fun SectionHeader(
             text       = title,
             fontSize   = 18.sp,
             fontWeight = FontWeight.Bold,
-            color      = Black
+            color      = MaterialTheme.colorScheme.onBackground
         )
         Text(
             text      = "See All →",
-            color     = Secondary,
+            color     = MaterialTheme.colorScheme.secondary,
             fontSize  = 14.sp,
             modifier  = Modifier.clickable { onSeeAll() }
         )
@@ -257,7 +257,7 @@ fun HeadlineCard(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.45f))
+                    .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.45f))
             )
             Column(
                 modifier = Modifier
@@ -266,14 +266,14 @@ fun HeadlineCard(
             ) {
                 Text(
                     text       = article.source.name,
-                    color      = Color.White.copy(alpha = 0.8f),
+                    color      = MaterialTheme.colorScheme.background.copy(alpha = 0.8f),
                     fontSize   = 11.sp,
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text       = article.title,
-                    color      = Color.White,
+                    color      = MaterialTheme.colorScheme.background,
                     fontSize   = 14.sp,
                     fontWeight = FontWeight.Bold,
                     maxLines   = 3,
@@ -293,13 +293,13 @@ fun CategoryChip(
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(20.dp))
-            .background(if (isSelected) Primary else LightGray)
+            .background(if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant)
             .clickable { onClick() }
             .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         Text(
             text      = category.label,
-            color     = if (isSelected) White else DarkGray,
+            color     = if (isSelected) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onBackground,
             fontSize  = 13.sp,
             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
         )
@@ -335,12 +335,12 @@ fun ArticleListItem(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.45f))
+                    .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.45f))
             )
             Text(
                 modifier = Modifier.padding(15.dp),
                 text = article.title,
-                color = White,
+                color = MaterialTheme.colorScheme.background,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold,
             )
@@ -354,14 +354,14 @@ fun ArticleListItem(
                 article.author?.let {
                     Text(
                         text = it,
-                        color = White,
+                        color = MaterialTheme.colorScheme.background,
                         fontSize = 11.sp,
                         fontWeight = FontWeight.SemiBold
                     )
                 }
                 Text(
                     text = article.publishedAt.take(10),
-                    color = White,
+                    color = MaterialTheme.colorScheme.background,
                     fontSize = 11.sp,
                     fontWeight = FontWeight.SemiBold
                 )

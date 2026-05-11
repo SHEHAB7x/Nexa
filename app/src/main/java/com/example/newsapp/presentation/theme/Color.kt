@@ -20,3 +20,11 @@ val Black     = Color(0xFF000000)
 val DarkGray  = Color(0xFF333333)
 val LightGray = Color(0xFFF5F5F5)
 val MediumGray = Color(0xFF9E9E9E)
+
+// Dark Theme
+val DarkBackground    = Color(0xFF121212)
+val DarkSurface       = Color(0xFF1E1E1E)
+val DarkCard          = Color(0xFF2C2C2C)
+val DarkTextPrimary   = Color(0xFFE0E0E0)
+val DarkTextSecondary = Color(0xFF9E9E9E)
+val DarkDivider       = Color(0xFF3A3A3A)

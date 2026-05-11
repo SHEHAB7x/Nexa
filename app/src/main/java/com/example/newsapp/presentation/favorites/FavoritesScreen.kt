@@ -20,6 +20,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
@@ -53,7 +54,7 @@ fun FavoritesScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(White)
+            .background(MaterialTheme.colorScheme.background)
     ) {
 
         Box(
@@ -65,18 +66,18 @@ fun FavoritesScreen(
                 text       = "Favorites",
                 fontSize   = 22.sp,
                 fontWeight = FontWeight.Bold,
-                color      = DarkGray,
+                color      = MaterialTheme.colorScheme.onBackground,
                 modifier   = Modifier.align(Alignment.CenterStart)
             )
             Text(
                 text     = "${uiState.articles.size} articles",
                 fontSize = 13.sp,
-                color    = MediumGray,
+                color    = MaterialTheme.colorScheme.outline,
                 modifier = Modifier.align(Alignment.CenterEnd)
             )
         }
 
-        HorizontalDivider(color = LightGray)
+        HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant)
 
         when {
             uiState.isLoading -> {
@@ -84,7 +85,7 @@ fun FavoritesScreen(
                     modifier         = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator(color = Primary)
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                 }
             }
 
@@ -109,7 +110,7 @@ fun FavoritesScreen(
                             )
                         }
                         HorizontalDivider(
-                            color    = LightGray,
+                            color    = MaterialTheme.colorScheme.surfaceVariant,
                             modifier = Modifier.padding(horizontal = 16.dp)
                         )
                     }
@@ -155,7 +156,7 @@ fun SwipeToDeleteItem(
                 Icon(
                     imageVector        = Icons.Default.Delete,
                     contentDescription = "Delete",
-                    tint               = White,
+                    tint               = MaterialTheme.colorScheme.background,
                     modifier           = Modifier.size(28.dp)
                 )
             }
@@ -181,13 +182,13 @@ fun EmptyFavoritesView() {
             text       = "No favorites yet",
             fontSize   = 20.sp,
             fontWeight = FontWeight.Bold,
-            color      = DarkGray
+            color      = MaterialTheme.colorScheme.onBackground
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text     = "Tap the heart icon on any article\nto save it here",
             fontSize = 14.sp,
-            color    = MediumGray,
+            color    = MaterialTheme.colorScheme.outline,
             textAlign = androidx.compose.ui.text.style.TextAlign.Center
         )
     }

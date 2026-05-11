@@ -26,6 +26,7 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -49,7 +50,6 @@ import com.example.newsapp.domain.model.Source
 import com.example.newsapp.presentation.theme.DarkGray
 import com.example.newsapp.presentation.theme.LightGray
 import com.example.newsapp.presentation.theme.NewsAppTheme
-import com.example.newsapp.presentation.theme.Primary
 import com.example.newsapp.presentation.theme.Secondary
 import com.example.newsapp.presentation.theme.White
 
@@ -74,7 +74,7 @@ fun ArticleDetailScreen(
                 .fillMaxWidth(),
             contentAlignment = Alignment.Center
         ){
-            CircularProgressIndicator(color = Primary)
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
         }
         return
     }
@@ -96,7 +96,7 @@ fun ArticleDetailContent(
     onToggleSave: () -> Unit,
     context: Context
 ){
-    Box(modifier = Modifier.fillMaxSize().background(White)){
+    Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)){
         Column(modifier = Modifier.fillMaxSize()) {
             Box(modifier = Modifier.fillMaxWidth().fillMaxHeight(.4f))
             {
@@ -173,26 +173,26 @@ fun ArticleDetailContent(
             ) {
                 Text(
                     text = article.source.name,
-                    color = Primary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.SemiBold
                 )
                 article.description?.let {
                     Text(
                         text = it,
-                        color = DarkGray,
+                        color = MaterialTheme.colorScheme.onBackground,
                         fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold,
                         lineHeight = 22.sp
                     )
                 }
 
-                HorizontalDivider(color = LightGray)
+                HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant)
 
                 article.content?.let {
                     Text(
                         text       = it,
-                        color      = DarkGray,
+                        color      = MaterialTheme.colorScheme.onBackground,
                         fontSize   = 14.sp,
                         lineHeight = 22.sp
                     )
@@ -200,7 +200,7 @@ fun ArticleDetailContent(
 
                 Text(
                     text = "Read full article →",
-                    color      = Secondary,
+                    color      = MaterialTheme.colorScheme.secondary,
                     fontSize   = 14.sp,
                     fontWeight = FontWeight.SemiBold,
                     modifier   = Modifier.clickable {
@@ -215,7 +215,7 @@ fun ArticleDetailContent(
             }
             Row(
                 modifier = Modifier
-                    .background(White)
+                    .background(MaterialTheme.colorScheme.background)
                     .fillMaxHeight()
                     .padding(end = 40.dp)
                     .fillMaxWidth(),
@@ -225,14 +225,14 @@ fun ArticleDetailContent(
                     modifier = Modifier
                         .size(50.dp)
                         .clip(RoundedCornerShape(50.dp))
-                        .background(Primary)
+                        .background(MaterialTheme.colorScheme.primary)
                         .clickable{ onToggleSave() },
                     contentAlignment = Alignment.Center,
                 ){
                     Icon(
                         imageVector = if (isSaved) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                         contentDescription = if (isSaved) "Remove from favorites" else "Add to favorites",
-                        tint = White,
+                        tint = MaterialTheme.colorScheme.background,
                         modifier = Modifier.size(30.dp)
                     )
                 }

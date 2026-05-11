@@ -29,6 +29,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -54,11 +55,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.newsapp.domain.model.Article
 import com.example.newsapp.presentation.home.ArticleListItem
 import com.example.newsapp.presentation.home.categories
-import com.example.newsapp.presentation.theme.DarkGray
-import com.example.newsapp.presentation.theme.LightGray
-import com.example.newsapp.presentation.theme.MediumGray
-import com.example.newsapp.presentation.theme.Primary
-import com.example.newsapp.presentation.theme.White
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -77,7 +74,7 @@ fun  SearchScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(White)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Row(
             modifier = Modifier
@@ -89,7 +86,7 @@ fun  SearchScreen(
             Icon(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Back",
-                tint = DarkGray,
+                tint = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
                     .size(24.dp)
                     .clickable { onBackClick() }
@@ -98,22 +95,22 @@ fun  SearchScreen(
             OutlinedTextField(
                 value = uiState.query,
                 onValueChange = viewModel::onQueryChanged,
-                placeholder = { Text("Search news...", color = MediumGray) },
+                placeholder = { Text("Search news...", color = MaterialTheme.colorScheme.outline) },
                 singleLine = true,
                 modifier = Modifier
                     .weight(1f)
                     .focusRequester(focusRequester),
                 shape = RoundedCornerShape(24.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Primary,
-                    unfocusedBorderColor = LightGray,
-                    cursorColor = Primary
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.surfaceVariant,
+                    cursorColor = MaterialTheme.colorScheme.primary
                 ),
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = null,
-                        tint = MediumGray
+                        tint = MaterialTheme.colorScheme.outline
                     )
                 },
                 trailingIcon = {
@@ -121,7 +118,7 @@ fun  SearchScreen(
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "Clear",
-                            tint = MediumGray,
+                            tint = MaterialTheme.colorScheme.outline,
                             modifier = Modifier.clickable {
                                 viewModel.onQueryChanged("")
                             }
@@ -140,13 +137,13 @@ fun  SearchScreen(
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(20.dp))
-                        .background(Primary)
+                        .background(MaterialTheme.colorScheme.primary)
                         .clickable { viewModel.toggleFilterSheet() }
                         .padding(horizontal = 16.dp, vertical = 8.dp)
                 ) {
                     Text(
                         text = "⚙ Filter",
-                        color = White,
+                        color = MaterialTheme.colorScheme.background,
                         fontSize = 13.sp,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -158,28 +155,28 @@ fun  SearchScreen(
                     modifier = Modifier
                         .clip(RoundedCornerShape(20.dp))
                         .background(
-                            if (uiState.selectedCategory == category) Primary
-                            else LightGray
+                            if (uiState.selectedCategory == category) MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.surfaceVariant
                         )
                         .clickable { viewModel.onCategorySelected(category) }
                         .padding(horizontal = 16.dp, vertical = 8.dp)
                 ) {
                     Text(
                         text = category.label,
-                        color = if (uiState.selectedCategory == category) White
-                        else DarkGray,
+                        color = if (uiState.selectedCategory == category) MaterialTheme.colorScheme.background
+                        else MaterialTheme.colorScheme.onBackground,
                         fontSize = 13.sp
                     )
                 }
             }
         }
 
-        HorizontalDivider(color = LightGray)
+        HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant)
 
         if (uiState.articles.isNotEmpty()) {
             Text(
                 text = "About ${uiState.articles.size} results for \"${uiState.query}\"",
-                color = MediumGray,
+                color = MaterialTheme.colorScheme.outline,
                 fontSize = 12.sp,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             )
@@ -191,7 +188,7 @@ fun  SearchScreen(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator(color = Primary)
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                 }
             }
 
@@ -211,7 +208,7 @@ fun  SearchScreen(
                 ) {
                     Text(
                         text = "Type to search news...",
-                        color = MediumGray,
+                        color = MaterialTheme.colorScheme.outline,
                         fontSize = 14.sp
                     )
                 }
@@ -224,7 +221,7 @@ fun  SearchScreen(
                 ) {
                     Text(
                         text = "No results for \"${uiState.query}\"",
-                        color = MediumGray,
+                        color = MaterialTheme.colorScheme.outline,
                         fontSize = 14.sp
                     )
                 }
@@ -238,7 +235,7 @@ fun  SearchScreen(
                             onClick = { onArticleClick(article) }
                         )
                         HorizontalDivider(
-                            color    = LightGray,
+                            color    = MaterialTheme.colorScheme.surfaceVariant,
                             modifier = Modifier.padding(horizontal = 16.dp)
                         )
                     }
@@ -266,7 +263,7 @@ fun  SearchScreen(
 
         ModalBottomSheet(
             onDismissRequest = onDismiss,
-            containerColor = White,
+            containerColor = MaterialTheme.colorScheme.background,
             shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
         ) {
             Column(
@@ -284,10 +281,10 @@ fun  SearchScreen(
                         text = "Filter",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
-                        color = DarkGray
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                     TextButton(onClick = { selectedSort = "Recommended" }) {
-                        Text(text = "⟳ Reset", color = MediumGray)
+                        Text(text = "⟳ Reset", color = MaterialTheme.colorScheme.outline)
                     }
                 }
 
@@ -295,7 +292,7 @@ fun  SearchScreen(
                     text = "Sort By",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = DarkGray
+                    color = MaterialTheme.colorScheme.onBackground
                 )
 
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -305,10 +302,10 @@ fun  SearchScreen(
                             onClick = { selectedSort = option },
                             label = { Text(option) },
                             colors = FilterChipDefaults.filterChipColors(
-                                selectedContainerColor = Primary,
-                                selectedLabelColor = White,
-                                containerColor = LightGray,
-                                labelColor = DarkGray
+                                selectedContainerColor = MaterialTheme.colorScheme.primary,
+                                selectedLabelColor = MaterialTheme.colorScheme.background,
+                                containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                                labelColor = MaterialTheme.colorScheme.onBackground
                             )
                         )
                     }
@@ -322,11 +319,11 @@ fun  SearchScreen(
                         .fillMaxWidth()
                         .height(50.dp),
                     shape = RoundedCornerShape(25.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Primary)
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
                     Text(
                         text = "SAVE",
-                        color = White,
+                        color = MaterialTheme.colorScheme.background,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
                     )
