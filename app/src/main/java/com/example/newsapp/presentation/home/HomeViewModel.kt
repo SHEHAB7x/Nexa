@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsapp.domain.model.NewsCategory
 import com.example.newsapp.domain.repository.NewsRepository
+import com.example.newsapp.domain.usecase.GetTopHeadlinesUseCase
 import com.example.newsapp.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: NewsRepository
+    private val repository: NewsRepository,
+    private val getTopHeadlinesUseCase: GetTopHeadlinesUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState.asStateFlow()
@@ -26,7 +28,7 @@ class HomeViewModel @Inject constructor(
 
     private fun loadHeadlines(){
         viewModelScope.launch {
-            repository.getHeadlines().collect { result ->
+            getTopHeadlinesUseCase.invoke().collect { result ->
                 when(result){
                     is Resource.Loading -> _uiState.update {
                         it.copy(isHeadlinesLoading = true, headlinesError = null)
