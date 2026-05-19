@@ -127,5 +127,11 @@ dependencies {
     testImplementation("app.cash.turbine:turbine:1.1.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
 
+    //Data store
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+
+    //Pager
+    implementation("com.google.accompanist:accompanist-pager:0.34.0")
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
 }

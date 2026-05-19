@@ -14,19 +14,32 @@ import com.example.newsapp.presentation.SharedArticleViewModel
 import com.example.newsapp.presentation.detail.ArticleDetailScreen
 import com.example.newsapp.presentation.favorites.FavoritesScreen
 import com.example.newsapp.presentation.home.HomeScreen
+import com.example.newsapp.presentation.onboarding.OnboardingScreen
 import com.example.newsapp.presentation.search.SearchScreen
 @Composable
 fun NavGraph(
     navController: NavHostController,
+    startDestination: String,
     modifier: Modifier = Modifier
     ) {
     val sharedViewModel : SharedArticleViewModel = hiltViewModel()
 
     NavHost(
         navController    = navController,
-        startDestination = Screen.Home.route,
+        startDestination = startDestination,
         modifier = modifier
     ) {
+
+        composable(Screen.Onboarding.route){
+            OnboardingScreen(
+                onFinished = {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Onboarding.route) { inclusive = true }
+                    }
+                }
+            )
+        }
+
         composable(Screen.Home.route) {
             HomeScreen(
                 onArticleClick = { article ->
