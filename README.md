@@ -251,7 +251,7 @@ Without debounce, every keystroke triggers an API call. 500ms debounce waits unt
 
 **Shehab Abdelhares** — Android Developer
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://linkedin.com/in/shehab-abdelhares)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://www.linkedin.com/in/shehab0x/)
 [![GitHub](https://img.shields.io/badge/GitHub-Follow-black)](https://github.com/SHEHAB7x)
 [![Email](https://img.shields.io/badge/Email-Contact-red)](mailto:sabdalhares@gmail.com)
 
