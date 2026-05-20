@@ -13,6 +13,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -41,6 +42,7 @@ import com.example.newsapp.presentation.theme.*
 fun HomeScreen(
     onArticleClick: (Article) -> Unit,
     onSearchClick: () -> Unit,
+    onSettingsClick: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -48,6 +50,7 @@ fun HomeScreen(
         uiState        = uiState,
         onArticleClick = onArticleClick,
         onSearchClick  = onSearchClick,
+        onSettingsClick = onSettingsClick,
         onCategorySelected = viewModel::onCategorySelected,
         onRefresh = viewModel::refresh
     )
@@ -59,6 +62,7 @@ fun HomeScreenContent(
     uiState: HomeUiState,
     onArticleClick: (Article) -> Unit,
     onSearchClick: () -> Unit,
+    onSettingsClick: () -> Unit,
     onCategorySelected: (NewsCategory) -> Unit,
     onRefresh: () -> Unit
 ) {
@@ -80,7 +84,7 @@ fun HomeScreenContent(
                 .background(MaterialTheme.colorScheme.background),
             contentPadding = PaddingValues(bottom = 16.dp)
         ) {
-            item { SearchBarRow(onSearchClick = onSearchClick) }
+            item { SearchBarRow(onSearchClick = onSearchClick, onSettingsClick = onSettingsClick) }
             item {
                 SectionHeader(
                     title    = "Latest News",
@@ -190,13 +194,17 @@ fun HomeScreenPreview() {
             onArticleClick     = {},
             onSearchClick      = {},
             onCategorySelected = {},
-            onRefresh = {}
+            onRefresh = {},
+            onSettingsClick = {}
         )
     }
 }
 
 @Composable
-fun SearchBarRow(onSearchClick: () -> Unit) {
+fun SearchBarRow(
+    onSearchClick: () -> Unit,
+    onSettingsClick: () -> Unit
+    ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -223,11 +231,27 @@ fun SearchBarRow(onSearchClick: () -> Unit) {
                     modifier           = Modifier.size(20.dp)
                 )
                 Text(
-                    text  = "Search...",
+                    text  = "Search news...",
                     color = MaterialTheme.colorScheme.outline,
                     fontSize = 14.sp
                 )
             }
+        }
+
+        Box(
+            modifier = Modifier
+                .size(44.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.primary)
+                .clickable { onSettingsClick() },
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Default.Settings,
+                contentDescription = "Settings",
+                tint = Color.White,
+                modifier = Modifier.size(20.dp)
+            )
         }
 
         Box(

@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.collectAsState
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.newsapp.presentation.settings.SettingsViewModel
 import com.example.newsapp.presentation.splash.SplashViewModel
 import com.example.newsapp.presentation.splash.StartDestination
 import com.example.newsapp.utils.NetworkMonitor
@@ -58,15 +59,21 @@ class MainActivity : ComponentActivity() {
             )
         }
         setContent {
+            val splashViewModel: SplashViewModel = hiltViewModel()
+            val settingsViewModel: SettingsViewModel = hiltViewModel()
+
+
             val startDestination by splashViewModel.startDestination.collectAsState()
+            val settingsUiState by settingsViewModel.uiState.collectAsState()
 
-            NewsAppTheme {
-                startDestination?.let { destination ->
+            startDestination?.let { destination ->
 
-                    val startRoute = when (destination) {
-                        is StartDestination.Onboarding -> Screen.Onboarding.route
-                        is StartDestination.Home       -> Screen.Home.route
-                    }
+                val startRoute = when (destination) {
+                    is StartDestination.Onboarding -> Screen.Onboarding.route
+                    is StartDestination.Home       -> Screen.Home.route
+                }
+                NewsAppTheme(darkTheme = settingsUiState.isDarkMode) {
+
 
                     val navController     = rememberNavController()
                     val navBackStackEntry by navController.currentBackStackEntryAsState()

@@ -28,7 +28,10 @@ class NewsRepositoryImpl @Inject constructor(
     private val categoryArticleDao: CategoryArticleDao
 ) : NewsRepository {
 
-    override fun getHeadlines(): Flow<Resource<List<Article>>> = flow {
+    override fun getHeadlines(
+        country: String,
+        language: String
+    ): Flow<Resource<List<Article>>> = flow {
         emit(Resource.Loading())
         val cached = headlineDao.getHeadlines().first().headlinesToArticles()
         if(cached.isNotEmpty()){
@@ -51,7 +54,9 @@ class NewsRepositoryImpl @Inject constructor(
     }
 
     override fun getArticlesByCategory(
-        category: NewsCategory
+        category: NewsCategory,
+        language: String,
+        country: String
     ): Flow<Resource<List<Article>>> = flow {
         emit(Resource.Loading())
 

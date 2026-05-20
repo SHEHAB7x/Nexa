@@ -13,6 +13,7 @@ interface NewsApiService {
         @Query("from")    from: String = "2026-04-04",
         @Query("to")      to: String = "2026-04-04",
         @Query("sortBy")  sortBy: String = "popularity",
+        @Query("language") language: String = "en",
         @Query("apiKey")  apiKey: String = API_KEY
     ): NewsResponseDto
 
@@ -21,6 +22,7 @@ interface NewsApiService {
         @Query("q")       q: String = "tesla",
         @Query("from")    from: String = "2026-03-08",
         @Query("sortBy")  sortBy: String = "publishedAt",
+        @Query("language") language: String = "en",
         @Query("apiKey")  apiKey: String = API_KEY
     ): NewsResponseDto
 
@@ -34,6 +36,7 @@ interface NewsApiService {
     @GET("v2/everything")
     suspend fun getWsjNews(
         @Query("domains") domains: String = "wsj.com",
+        @Query("language") language: String = "en",
         @Query("apiKey")  apiKey: String = API_KEY
     ): NewsResponseDto
 

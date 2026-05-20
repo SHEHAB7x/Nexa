@@ -16,6 +16,8 @@ import com.example.newsapp.presentation.favorites.FavoritesScreen
 import com.example.newsapp.presentation.home.HomeScreen
 import com.example.newsapp.presentation.onboarding.OnboardingScreen
 import com.example.newsapp.presentation.search.SearchScreen
+import com.example.newsapp.presentation.settings.SettingsScreen
+
 @Composable
 fun NavGraph(
     navController: NavHostController,
@@ -48,7 +50,16 @@ fun NavGraph(
                 },
                 onSearchClick = {
                     navController.navigate(Screen.Search.route)
+                },
+                onSettingsClick = {
+                    navController.navigate(Screen.Settings.route)
                 }
+            )
+        }
+
+        composable(Screen.Settings.route){
+            SettingsScreen(
+                onBackClick = { navController.popBackStack() }
             )
         }
 
