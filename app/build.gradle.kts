@@ -134,4 +134,8 @@ dependencies {
     implementation("com.google.accompanist:accompanist-pager:0.34.0")
     implementation("androidx.core:core-splashscreen:1.0.1")
 
+    //Simmer
+    implementation("com.valentinilk.shimmer:compose-shimmer:1.3.0")
+
+
 }

@@ -36,6 +36,8 @@ import coil.compose.AsyncImage
 import com.example.newsapp.domain.model.Article
 import com.example.newsapp.domain.model.NewsCategory
 import com.example.newsapp.domain.model.Source
+import com.example.newsapp.presentation.components.ArticleListItemShimmer
+import com.example.newsapp.presentation.components.HeadlineCardShimmer
 import com.example.newsapp.presentation.theme.*
 
 @Composable
@@ -92,12 +94,14 @@ fun HomeScreenContent(
                 )
             }
             item {
-                if (uiState.isHeadlinesLoading) {
-                    Box(
-                        modifier         = Modifier.fillMaxWidth().height(200.dp),
-                        contentAlignment = Alignment.Center
+                if (uiState.isHeadlinesLoading && uiState.headlines.isEmpty()) {
+                    LazyRow(
+                        contentPadding = PaddingValues(horizontal = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                        items(3) {
+                            HeadlineCardShimmer()
+                        }
                     }
                 } else {
                     LazyRow(
@@ -129,15 +133,14 @@ fun HomeScreenContent(
                 }
                 Spacer(modifier = Modifier.height(16.dp))
             }
-            if (uiState.isCategoryLoading) {
-                item {
-                    Box(
-                        modifier         = Modifier.fillMaxWidth().height(300.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            if (uiState.isCategoryLoading && uiState.categoryArticles.isEmpty()) {
+                    items(5) {
+                        ArticleListItemShimmer()
+                        HorizontalDivider(
+                            color    = MaterialTheme.colorScheme.surfaceVariant,
+                            modifier = Modifier.padding(horizontal = 16.dp)
+                        )
                     }
-                }
             } else {
                 items(uiState.categoryArticles) { article ->
                     ArticleListItem(
@@ -172,32 +175,6 @@ fun HomeScreenContent(
         )
     }
 
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun HomeScreenPreview() {
-    NewsAppTheme {
-        HomeScreenContent(
-            uiState = HomeUiState(
-                headlines = listOf(fakeArticle, fakeArticle, fakeArticle),
-                categoryArticles = listOf(
-                    fakeArticle,
-                    fakeArticle,
-                    fakeArticle,
-                    fakeArticle
-                ),
-                selectedCategory   = NewsCategory.Apple,
-                isHeadlinesLoading = false,
-                isCategoryLoading  = false
-            ),
-            onArticleClick     = {},
-            onSearchClick      = {},
-            onCategorySelected = {},
-            onRefresh = {},
-            onSettingsClick = {}
-        )
-    }
 }
 
 @Composable
@@ -431,6 +408,32 @@ fun ArticleListItem(
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun HomeScreenPreview() {
+    NewsAppTheme {
+        HomeScreenContent(
+            uiState = HomeUiState(
+                headlines = listOf(fakeArticle, fakeArticle, fakeArticle),
+                categoryArticles = listOf(
+                    fakeArticle,
+                    fakeArticle,
+                    fakeArticle,
+                    fakeArticle
+                ),
+                selectedCategory   = NewsCategory.Apple,
+                isHeadlinesLoading = false,
+                isCategoryLoading  = false
+            ),
+            onArticleClick     = {},
+            onSearchClick      = {},
+            onCategorySelected = {},
+            onRefresh = {},
+            onSettingsClick = {}
+        )
     }
 }
 

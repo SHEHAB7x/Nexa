@@ -9,9 +9,9 @@ A production-grade Android news application built with **Clean Architecture**, *
 <p align="center"> 
   <img src="screenshots/home.png" width="15%" />
   <img src="screenshots/onboarding1.png" width="15%" />
+  <img src="screenshots/settings_dark.png" width="15%" />
   <img src="screenshots/details.png" width="15%" />
   <img src="screenshots/favorites.png" width="15%" />
-  <img src="screenshots/settings_dark.png" width="15%" />
   <img src="screenshots/select_language.png" width="15%" />
 </p>![Screenshot_20260521_020004.png](../../OneDrive/Desktop/HospitalScreenshots/Screenshot_20260521_020004.png)
 
