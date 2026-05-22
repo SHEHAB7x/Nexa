@@ -1,5 +1,12 @@
 package com.example.newsapp.presentation.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,8 +26,12 @@ import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -331,16 +342,29 @@ fun CategoryChip(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
+    val backgroundColor by animateColorAsState(
+        targetValue = if (isSelected) MaterialTheme.colorScheme.primary
+        else MaterialTheme.colorScheme.surfaceVariant,
+        animationSpec = spring(stiffness = Spring.StiffnessMedium),
+        label = "chip background"
+    )
+
+    val textColor by animateColorAsState(
+        targetValue = if (isSelected) Color.White
+                      else MaterialTheme.colorScheme.onBackground,
+        animationSpec = spring(stiffness = Spring.StiffnessMedium),
+        label = "chip text"
+    )
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(20.dp))
-            .background(if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant)
+            .background(backgroundColor)
             .clickable { onClick() }
             .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         Text(
             text      = category.label,
-            color     = if (isSelected) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onBackground,
+            color     = textColor,
             fontSize  = 13.sp,
             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
         )
@@ -352,60 +376,74 @@ fun ArticleListItem(
     article: Article,
     onClick: () -> Unit
 ) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(150.dp)
-            .clickable { onClick() }
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(5.dp)
+    var isVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        isVisible = true
+    }
+    AnimatedVisibility(
+        visible = isVisible,
+        enter   = fadeIn(animationSpec = tween(400)) +
+                slideInVertically(
+                    initialOffsetY = { it / 4 },
+                    animationSpec  = tween(400)
+                )
     ) {
-        Box(
+        Card(
             modifier = Modifier
-                .fillMaxSize()
-        ){
-            AsyncImage(
-                model              = article.imageUrl,
-                contentDescription = article.title,
-                contentScale       = ContentScale.Crop,
-                modifier           = Modifier
-                    .fillMaxSize()
-                    .clip(RoundedCornerShape(8.dp))
-            )
+                .fillMaxWidth()
+                .height(150.dp)
+                .clickable { onClick() }
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            shape = RoundedCornerShape(12.dp),
+            elevation = CardDefaults.cardElevation(5.dp)
+        ) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.45f))
-            )
-            Text(
-                modifier = Modifier.padding(15.dp),
-                text = article.title,
-                color = MaterialTheme.colorScheme.background,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold,
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(15.dp)
-                    .align(Alignment.BottomStart),
-                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                article.author?.let {
+                AsyncImage(
+                    model = article.imageUrl,
+                    contentDescription = article.title,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(8.dp))
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.45f))
+                )
+                Text(
+                    modifier = Modifier.padding(15.dp),
+                    text = article.title,
+                    color = MaterialTheme.colorScheme.background,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(15.dp)
+                        .align(Alignment.BottomStart),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    article.author?.let {
+                        Text(
+                            text = it,
+                            color = MaterialTheme.colorScheme.background,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
                     Text(
-                        text = it,
+                        text = article.publishedAt.take(10),
                         color = MaterialTheme.colorScheme.background,
                         fontSize = 11.sp,
                         fontWeight = FontWeight.SemiBold
                     )
                 }
-                Text(
-                    text = article.publishedAt.take(10),
-                    color = MaterialTheme.colorScheme.background,
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
             }
         }
     }

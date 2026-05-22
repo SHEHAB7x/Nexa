@@ -6,10 +6,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import com.example.newsapp.presentation.SharedArticleViewModel
 import com.example.newsapp.presentation.detail.ArticleDetailScreen
 import com.example.newsapp.presentation.favorites.FavoritesScreen
@@ -17,6 +15,8 @@ import com.example.newsapp.presentation.home.HomeScreen
 import com.example.newsapp.presentation.onboarding.OnboardingScreen
 import com.example.newsapp.presentation.search.SearchScreen
 import com.example.newsapp.presentation.settings.SettingsScreen
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 
 @Composable
 fun NavGraph(
@@ -29,7 +29,34 @@ fun NavGraph(
     NavHost(
         navController    = navController,
         startDestination = startDestination,
-        modifier = modifier
+        modifier = modifier,
+        enterTransition = {
+            slideInHorizontally(
+                initialOffsetX = { it },
+                animationSpec = tween(300)
+            ) + fadeIn(animationSpec = tween(300))
+        },
+
+        exitTransition = {
+            slideOutHorizontally (
+                targetOffsetX = { -it / 3 },
+                animationSpec = tween(300)
+            ) + fadeOut(animationSpec = tween(300))
+        },
+
+        popEnterTransition = {
+            slideInHorizontally (
+                initialOffsetX = { -it / 3 },
+                animationSpec = tween(300)
+            ) + fadeIn(animationSpec = tween(300))
+        },
+
+        popExitTransition = {
+            slideOutHorizontally (
+                targetOffsetX = { it },
+                animationSpec = tween(300)
+            ) + fadeOut(animationSpec = tween(300))
+        }
     ) {
 
         composable(Screen.Onboarding.route){
