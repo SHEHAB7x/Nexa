@@ -13,7 +13,7 @@ A production-grade Android **news** application built with **Clean Architecture*
   <img src="screenshots/details.png" width="15%" />
   <img src="screenshots/favorites.png" width="15%" />
   <img src="screenshots/select_language.png" width="15%" />
-</p>![Screenshot_20260521_020004.png](../../OneDrive/Desktop/HospitalScreenshots/Screenshot_20260521_020004.png)
+</p>
 
 ---
 
