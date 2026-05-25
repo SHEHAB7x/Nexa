@@ -1,6 +1,6 @@
-# 📰 NewsApp
+# 📰 Nexa
 
-A production-grade Android news application built with **Clean Architecture**, **Jetpack Compose**, and modern Android development best practices.
+A production-grade Android **news** application built with **Clean Architecture**, **Jetpack Compose**, and modern Android development best practices.
 
 ---
 

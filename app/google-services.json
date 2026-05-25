@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1008990273776",
+    "project_id": "nexa-c882b",
+    "storage_bucket": "nexa-c882b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008990273776:android:a6ee2f8dc2ae1566ef4235",
+        "android_client_info": {
+          "package_name": "com.example.newsapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyUpFhHBRI8SVMfFZvIVwdK03KJGcRVuE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

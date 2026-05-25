@@ -15,6 +15,7 @@ import com.example.newsapp.domain.model.Article
 import com.example.newsapp.domain.model.NewsCategory
 import com.example.newsapp.domain.repository.NewsRepository
 import com.example.newsapp.domain.util.Resource
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
@@ -48,6 +49,10 @@ class NewsRepositoryImpl @Inject constructor(
 
             emit(Resource.Success(combined))
         } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().apply {
+                setCustomKey("failed_call", "getHeadlines")
+                recordException(e)
+            }
             if (cached.isNotEmpty())
                 emit(Resource.Error(e.message ?: "No internet connection"))
         }
@@ -84,6 +89,11 @@ class NewsRepositoryImpl @Inject constructor(
             )
             emit(Resource.Success(fresh))
         } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().apply {
+                setCustomKey("failed_call", "getArticlesByCategory")
+                setCustomKey("category", category.label)
+                recordException(e)
+            }
             if (cached.isNotEmpty())
                 emit(Resource.Error(e.message ?: "No internet connection"))
         }

@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.*
 import com.example.newsapp.utils.NewsWorker
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.HiltAndroidApp
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -22,6 +23,13 @@ class NewsApplication : Application(), Configuration.Provider {
     override fun onCreate() {
         super.onCreate()
         scheduleNewsUpdates()
+    }
+
+    private fun setupCrashlytics() {
+        FirebaseCrashlytics.getInstance().apply{
+            isCrashlyticsCollectionEnabled = !BuildConfig.DEBUG
+            setCustomKey("app_version", BuildConfig.VERSION_NAME)
+        }
     }
 
     private fun scheduleNewsUpdates() {

@@ -6,6 +6,10 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
+    kotlin("jvm") version "2.3.21"
+    id("com.google.devtools.ksp") version "2.3.7"
 }
 
 android {
@@ -137,5 +141,8 @@ dependencies {
     //Simmer
     implementation("com.valentinilk.shimmer:compose-shimmer:1.3.0")
 
-
+    //Firebase
+    implementation(platform("com.google.firebase:firebase-bom:34.13.0"))
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.firebase:firebase-analytics")
 }
