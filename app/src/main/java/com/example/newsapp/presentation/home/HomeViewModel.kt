@@ -31,21 +31,6 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState.asStateFlow()
 
-    val categoryArticles: Flow<PagingData<Article>> =
-        combine(
-            preferencesManager.selectedLanguage,
-            preferencesManager.selectedCountry,
-            _uiState.map { it.selectedCategory }
-        ) { language, country, category ->
-            Triple(language, country, category)
-        }
-            .flatMapLatest { (language, country, category) ->
-                repository.getPagedArticles(
-                    category = category,
-                    language = language.code,
-                    country = country.code
-                )
-            }.cachedIn(viewModelScope)
 
     init {
         viewModelScope.launch {

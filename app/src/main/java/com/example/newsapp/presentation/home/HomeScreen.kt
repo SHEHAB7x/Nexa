@@ -63,15 +63,13 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val categoryArticles = viewModel.categoryArticles.collectAsLazyPagingItems()
     HomeScreenContent(
         uiState        = uiState,
         onArticleClick = onArticleClick,
         onSearchClick  = onSearchClick,
         onSettingsClick = onSettingsClick,
         onCategorySelected = viewModel::onCategorySelected,
-        onRefresh = viewModel::refresh,
-        categoryArticles = categoryArticles
+        onRefresh = viewModel::refresh
     )
 }
 
@@ -79,7 +77,6 @@ fun HomeScreen(
 @Composable
 fun HomeScreenContent(
     uiState: HomeUiState,
-    categoryArticles: LazyPagingItems<Article> ,
     onArticleClick: (Article) -> Unit,
     onSearchClick: () -> Unit,
     onSettingsClick: () -> Unit,
@@ -90,10 +87,7 @@ fun HomeScreenContent(
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = isRefreshing,
-        onRefresh = {
-            onRefresh()
-            categoryArticles.refresh()
-        }
+        onRefresh = onRefresh
     )
 
     Box(
@@ -156,73 +150,7 @@ fun HomeScreenContent(
                 Spacer(modifier = Modifier.height(16.dp))
             }
 
-            when (categoryArticles.loadState.refresh) {
-                is LoadState.Loading -> {
-                    items(5) {
-                        ArticleListItemShimmer()
-                        HorizontalDivider(
-                            color = MaterialTheme.colorScheme.surfaceVariant,
-                            modifier = Modifier.padding(horizontal = 16.dp)
-                        )
-                    }
-                }
-
-                is LoadState.Error -> {
-                    item {
-                        Text(
-                            text = "Failed to load articles",
-                            color = MaterialTheme.colorScheme.error,
-                            modifier = Modifier.padding(16.dp)
-                        )
-                    }
-                }
-
-                else -> {
-                    // itemKey ensures Compose can efficiently recompose
-                    // only the items that changed instead of the whole list
-                    items(
-                        count = categoryArticles.itemCount,
-                        key = categoryArticles.itemKey { it.url }
-                    ) { index ->
-                        val article = categoryArticles[index]
-                        article?.let {
-                            ArticleListItem(
-                                article = it,
-                                onClick = { onArticleClick(it) }
-                            )
-                            HorizontalDivider(
-                                color = MaterialTheme.colorScheme.surfaceVariant,
-                                modifier = Modifier.padding(horizontal = 16.dp)
-                            )
-                        }
-                    }
-
-                    // show shimmer at the bottom while loading the next page
-                    when (categoryArticles.loadState.append) {
-                        is LoadState.Loading -> {
-                            items(2) {
-                                ArticleListItemShimmer()
-                            }
-                        }
-
-                        is LoadState.Error -> {
-                            item {
-                                TextButton(
-                                    onClick = { categoryArticles.retry() },
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    Text("Retry", color = MaterialTheme.colorScheme.primary)
-                                }
-                            }
-                        }
-
-                        else -> {}
-                    }
-                }
-            }
-
-
-            /*if (uiState.isCategoryLoading && uiState.categoryArticles.isEmpty()) {
+            if (uiState.isCategoryLoading && uiState.categoryArticles.isEmpty()) {
                     items(5) {
                         ArticleListItemShimmer()
                         HorizontalDivider(
@@ -254,7 +182,6 @@ fun HomeScreenContent(
                     )
                 }
             }
-        }*/
 
         }
         PullRefreshIndicator(

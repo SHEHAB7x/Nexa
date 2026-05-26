@@ -14,12 +14,6 @@ interface NewsRepository {
         language: String = "en"
     ): Flow<Resource<List<Article>>>
 
-    fun getPagedArticles(
-        category: NewsCategory,
-        language: String = "en",
-        country: String = "us"
-    ): Flow<PagingData<Article>>
-
     fun getArticlesByCategory(
         category: NewsCategory,
         language: String = "en",

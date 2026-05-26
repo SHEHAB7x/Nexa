@@ -1,3 +1,4 @@
+/*
 package com.example.newsapp.data.paging
 
 import androidx.paging.PagingSource
@@ -62,4 +63,4 @@ class NewsPagingSource(
             LoadResult.Error(e)
         }
     }
-}
+}*/
