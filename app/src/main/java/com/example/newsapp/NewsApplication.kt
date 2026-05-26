@@ -27,7 +27,7 @@ class NewsApplication : Application(), Configuration.Provider {
 
     private fun setupCrashlytics() {
         FirebaseCrashlytics.getInstance().apply{
-            isCrashlyticsCollectionEnabled = !BuildConfig.DEBUG
+            setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
             setCustomKey("app_version", BuildConfig.VERSION_NAME)
         }
     }
