@@ -139,8 +139,12 @@ dependencies {
     //Simmer
     implementation("com.valentinilk.shimmer:compose-shimmer:1.3.0")
 
+    //Firebase - Crashlytics
     implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
-
     implementation("com.google.firebase:firebase-crashlytics")
     implementation("com.google.firebase:firebase-analytics")
+
+    //Pagination
+    implementation("androidx.paging:paging-runtime-ktx:3.3.0")
+    implementation("androidx.paging:paging-compose:3.3.0")
 }

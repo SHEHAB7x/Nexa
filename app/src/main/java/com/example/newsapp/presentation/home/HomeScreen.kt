@@ -43,6 +43,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import coil.compose.AsyncImage
 import com.example.newsapp.domain.model.Article
 import com.example.newsapp.domain.model.NewsCategory
@@ -59,13 +63,15 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val categoryArticles = viewModel.categoryArticles.collectAsLazyPagingItems()
     HomeScreenContent(
         uiState        = uiState,
         onArticleClick = onArticleClick,
         onSearchClick  = onSearchClick,
         onSettingsClick = onSettingsClick,
         onCategorySelected = viewModel::onCategorySelected,
-        onRefresh = viewModel::refresh
+        onRefresh = viewModel::refresh,
+        categoryArticles = categoryArticles
     )
 }
 
@@ -73,6 +79,7 @@ fun HomeScreen(
 @Composable
 fun HomeScreenContent(
     uiState: HomeUiState,
+    categoryArticles: LazyPagingItems<Article> ,
     onArticleClick: (Article) -> Unit,
     onSearchClick: () -> Unit,
     onSettingsClick: () -> Unit,
@@ -82,15 +89,19 @@ fun HomeScreenContent(
     val isRefreshing = uiState.isHeadlinesLoading || uiState.isCategoryLoading
 
     val pullRefreshState = rememberPullRefreshState(
-        refreshing = uiState.isHeadlinesLoading,
-        onRefresh  = onRefresh
+        refreshing = isRefreshing,
+        onRefresh = {
+            onRefresh()
+            categoryArticles.refresh()
+        }
     )
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.background)
-        .pullRefresh(pullRefreshState)
-    ){
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .pullRefresh(pullRefreshState)
+    ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -100,7 +111,7 @@ fun HomeScreenContent(
             item { SearchBarRow(onSearchClick = onSearchClick, onSettingsClick = onSettingsClick) }
             item {
                 SectionHeader(
-                    title    = "Latest News",
+                    title = "Latest News",
                     onSeeAll = {}
                 )
             }
@@ -116,7 +127,7 @@ fun HomeScreenContent(
                     }
                 } else {
                     LazyRow(
-                        contentPadding        = PaddingValues(horizontal = 16.dp),
+                        contentPadding = PaddingValues(horizontal = 16.dp),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         items(uiState.headlines) { article ->
@@ -131,20 +142,87 @@ fun HomeScreenContent(
             item {
                 Spacer(modifier = Modifier.height(20.dp))
                 LazyRow(
-                    contentPadding        = PaddingValues(horizontal = 16.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(categories) { category ->
                         CategoryChip(
-                            category   = category,
+                            category = category,
                             isSelected = uiState.selectedCategory == category,
-                            onClick    = { onCategorySelected(category) }
+                            onClick = { onCategorySelected(category) }
                         )
                     }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
             }
-            if (uiState.isCategoryLoading && uiState.categoryArticles.isEmpty()) {
+
+            when (categoryArticles.loadState.refresh) {
+                is LoadState.Loading -> {
+                    items(5) {
+                        ArticleListItemShimmer()
+                        HorizontalDivider(
+                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            modifier = Modifier.padding(horizontal = 16.dp)
+                        )
+                    }
+                }
+
+                is LoadState.Error -> {
+                    item {
+                        Text(
+                            text = "Failed to load articles",
+                            color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
+                }
+
+                else -> {
+                    // itemKey ensures Compose can efficiently recompose
+                    // only the items that changed instead of the whole list
+                    items(
+                        count = categoryArticles.itemCount,
+                        key = categoryArticles.itemKey { it.url }
+                    ) { index ->
+                        val article = categoryArticles[index]
+                        article?.let {
+                            ArticleListItem(
+                                article = it,
+                                onClick = { onArticleClick(it) }
+                            )
+                            HorizontalDivider(
+                                color = MaterialTheme.colorScheme.surfaceVariant,
+                                modifier = Modifier.padding(horizontal = 16.dp)
+                            )
+                        }
+                    }
+
+                    // show shimmer at the bottom while loading the next page
+                    when (categoryArticles.loadState.append) {
+                        is LoadState.Loading -> {
+                            items(2) {
+                                ArticleListItemShimmer()
+                            }
+                        }
+
+                        is LoadState.Error -> {
+                            item {
+                                TextButton(
+                                    onClick = { categoryArticles.retry() },
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text("Retry", color = MaterialTheme.colorScheme.primary)
+                                }
+                            }
+                        }
+
+                        else -> {}
+                    }
+                }
+            }
+
+
+            /*if (uiState.isCategoryLoading && uiState.categoryArticles.isEmpty()) {
                     items(5) {
                         ArticleListItemShimmer()
                         HorizontalDivider(
@@ -176,8 +254,9 @@ fun HomeScreenContent(
                     )
                 }
             }
-        }
+        }*/
 
+        }
         PullRefreshIndicator(
             refreshing = isRefreshing,
             state = pullRefreshState,
@@ -185,7 +264,6 @@ fun HomeScreenContent(
             backgroundColor = MaterialTheme.colorScheme.surface
         )
     }
-
 }
 
 @Composable
@@ -449,7 +527,7 @@ fun ArticleListItem(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+/*@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun HomeScreenPreview() {
     NewsAppTheme {
@@ -470,10 +548,11 @@ fun HomeScreenPreview() {
             onSearchClick      = {},
             onCategorySelected = {},
             onRefresh = {},
-            onSettingsClick = {}
+            onSettingsClick = {},
+            categoryArticles = null
         )
     }
-}
+}*/
 
 private val fakeArticle = Article(
     source      = Source(id = null, name = "BBC News"),

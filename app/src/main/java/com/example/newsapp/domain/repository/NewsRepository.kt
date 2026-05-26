@@ -1,5 +1,6 @@
 package com.example.newsapp.domain.repository
 
+import androidx.paging.PagingData
 import com.example.newsapp.domain.model.Article
 import com.example.newsapp.domain.model.Language
 import com.example.newsapp.domain.model.NewsCategory
@@ -12,6 +13,12 @@ interface NewsRepository {
         country: String = "us",
         language: String = "en"
     ): Flow<Resource<List<Article>>>
+
+    fun getPagedArticles(
+        category: NewsCategory,
+        language: String = "en",
+        country: String = "us"
+    ): Flow<PagingData<Article>>
 
     fun getArticlesByCategory(
         category: NewsCategory,

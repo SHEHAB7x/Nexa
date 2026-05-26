@@ -1,5 +1,8 @@
 package com.example.newsapp.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.example.newsapp.data.local.dao.ArticleDao
 import com.example.newsapp.data.local.dao.CategoryArticleDao
 import com.example.newsapp.data.local.dao.HeadlineDao
@@ -10,6 +13,7 @@ import com.example.newsapp.data.mapper.headlinesToArticles
 import com.example.newsapp.data.mapper.toCategoryEntity
 import com.example.newsapp.data.mapper.toEntity
 import com.example.newsapp.data.mapper.toHeadlineEntity
+import com.example.newsapp.data.paging.NewsPagingSource
 import com.example.newsapp.data.remote.api.NewsApiService
 import com.example.newsapp.domain.model.Article
 import com.example.newsapp.domain.model.NewsCategory
@@ -56,6 +60,28 @@ class NewsRepositoryImpl @Inject constructor(
             if (cached.isNotEmpty())
                 emit(Resource.Error(e.message ?: "No internet connection"))
         }
+    }
+
+    override fun getPagedArticles(
+        category: NewsCategory,
+        language: String,
+        country: String
+    ): Flow<PagingData<Article>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                prefetchDistance = 5,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                NewsPagingSource(
+                    api     = api,
+                    category = category,
+                    language = language,
+                    country = country,
+                )
+            }
+        ).flow
     }
 
     override fun getArticlesByCategory(
