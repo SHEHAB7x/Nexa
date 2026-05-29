@@ -1,8 +1,5 @@
 package com.example.newsapp.data.repository
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
 import com.example.newsapp.data.local.dao.ArticleDao
 import com.example.newsapp.data.local.dao.CategoryArticleDao
 import com.example.newsapp.data.local.dao.HeadlineDao

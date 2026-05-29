@@ -54,6 +54,7 @@ import com.example.newsapp.presentation.theme.LightGray
 import com.example.newsapp.presentation.theme.NewsAppTheme
 import com.example.newsapp.presentation.theme.Secondary
 import com.example.newsapp.presentation.theme.White
+import com.example.newsapp.utils.ReadTimeCalculator
 
 @Composable
 fun ArticleDetailScreen(
@@ -196,7 +197,7 @@ fun ArticleDetailContent(
             }
             Column(
                 modifier = Modifier
-                    .fillMaxHeight(.7f)
+                    .fillMaxHeight(.6f)
                     .verticalScroll(rememberScrollState())
                     .padding(20.dp)
             ) {
@@ -226,7 +227,27 @@ fun ArticleDetailContent(
                         lineHeight = 22.sp
                     )
                 }
-
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment     = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text     = article.publishedAt.take(10),
+                        color    = MaterialTheme.colorScheme.outline,
+                        fontSize = 12.sp
+                    )
+                    Text(
+                        text  = "·",
+                        color = MaterialTheme.colorScheme.outline,
+                        fontSize = 12.sp
+                    )
+                    Text(
+                        text       = ReadTimeCalculator.calculate(article.content, article.description),
+                        color      = MaterialTheme.colorScheme.primary,
+                        fontSize   = 12.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
                 Text(
                     text = "Read full article →",
                     color      = MaterialTheme.colorScheme.secondary,
@@ -239,6 +260,8 @@ fun ArticleDetailContent(
                 )
 
                 Spacer(modifier = Modifier.height(80.dp))
+
+
 
 
             }

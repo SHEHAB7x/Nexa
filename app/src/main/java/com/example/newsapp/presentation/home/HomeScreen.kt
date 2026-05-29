@@ -54,6 +54,7 @@ import com.example.newsapp.domain.model.Source
 import com.example.newsapp.presentation.components.ArticleListItemShimmer
 import com.example.newsapp.presentation.components.HeadlineCardShimmer
 import com.example.newsapp.presentation.theme.*
+import com.example.newsapp.utils.ReadTimeCalculator
 
 @Composable
 fun HomeScreen(
@@ -386,6 +387,11 @@ fun ArticleListItem(
     LaunchedEffect(Unit) {
         isVisible = true
     }
+
+    val readTime = remember (article.url){
+        ReadTimeCalculator.calculate(article.content, article.description)
+    }
+
     AnimatedVisibility(
         visible = isVisible,
         enter   = fadeIn(animationSpec = tween(400)) +
@@ -445,6 +451,17 @@ fun ArticleListItem(
                     Text(
                         text = article.publishedAt.take(10),
                         color = MaterialTheme.colorScheme.background,
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Text(
+                        text = ".",
+                        color = MaterialTheme.colorScheme.outline,
+                        fontSize = 11.sp
+                    )
+                    Text(
+                        text = readTime,
+                        color = MaterialTheme.colorScheme.primary,
                         fontSize = 11.sp,
                         fontWeight = FontWeight.SemiBold
                     )
