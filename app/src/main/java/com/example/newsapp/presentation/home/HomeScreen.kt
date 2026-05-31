@@ -103,7 +103,7 @@ fun HomeScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background),
-            contentPadding = PaddingValues(bottom = 16.dp)
+            contentPadding = PaddingValues(bottom = 120.dp)
         ) {
             item { SearchBarRow(onSearchClick = onSearchClick, onSettingsClick = onSettingsClick) }
             item {

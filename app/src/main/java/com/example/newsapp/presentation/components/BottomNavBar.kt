@@ -39,12 +39,14 @@ fun BottomNavBar(
 
     NavigationBar(
         modifier = modifier
+            .shadow(
+                elevation = 16.dp,
+                shape = RoundedCornerShape(50.dp)
+            )
             .padding(horizontal = 44.dp)
             .clip(RoundedCornerShape(50.dp))
-            .background(Color.White.copy(alpha = 0.9f))
-            .shadow(30.dp,
-                RoundedCornerShape(50)),
-        containerColor = White,
+            .background(Color.White.copy(alpha = 0.95f)),
+        containerColor = Color.Transparent,
         tonalElevation = 0.dp
     ) {
         items.forEach { item ->

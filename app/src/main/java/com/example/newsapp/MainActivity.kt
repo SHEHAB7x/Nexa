@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -24,8 +23,8 @@ import javax.inject.Inject
 
 import android.Manifest
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.newsapp.presentation.settings.SettingsViewModel
@@ -84,17 +83,20 @@ class MainActivity : ComponentActivity() {
                         Screen.Favorites.route
                     )
 
-                    Scaffold(
-                        bottomBar = {
-                            if (showBottomBar) {
-                                BottomNavBar(navController = navController)
-                            }
-                        }
-                    ) { innerPadding ->
-                        Column(modifier = Modifier.padding(innerPadding)) {
-                            NavGraph(
-                                navController    = navController,
-                                startDestination = startRoute
+                    Box(
+                        modifier = Modifier.fillMaxSize()
+                    ){
+                        NavGraph(
+                            navController = navController,
+                            startDestination = startRoute
+                        )
+
+                        if (showBottomBar) {
+                            BottomNavBar(
+                                navController = navController,
+                                modifier = Modifier
+                                    .align(Alignment.BottomCenter)
+                                    .padding(bottom = 20.dp)
                             )
                         }
                     }
