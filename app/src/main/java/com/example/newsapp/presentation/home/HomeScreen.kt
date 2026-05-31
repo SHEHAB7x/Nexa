@@ -1,5 +1,6 @@
 package com.example.newsapp.presentation.home
 
+import android.graphics.Paint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
@@ -34,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -128,7 +130,8 @@ fun HomeScreenContent(
                         items(uiState.headlines) { article ->
                             HeadlineCard(
                                 article = article,
-                                onClick = { onArticleClick(article) }
+                                onClick = { onArticleClick(article) },
+                                isRead = article.url in uiState.readArticleUrls
                             )
                         }
                     }
@@ -163,6 +166,7 @@ fun HomeScreenContent(
                 items(uiState.categoryArticles) { article ->
                     ArticleListItem(
                         article = article,
+                        isRead = article.url in uiState.readArticleUrls,
                         onClick = { onArticleClick(article) }
                     )
                     HorizontalDivider(
@@ -295,13 +299,15 @@ fun SectionHeader(
 @Composable
 fun HeadlineCard(
     article: Article,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    isRead: Boolean
 ) {
     Card(
         modifier = Modifier
             .width(300.dp)
             .height(200.dp)
-            .clickable { onClick() },
+            .clickable { onClick() }
+            .alpha(if (isRead) 0.6f else 1f),
         shape     = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
@@ -317,6 +323,25 @@ fun HeadlineCard(
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.45f))
             )
+            if (isRead) {
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(
+                            MaterialTheme.colorScheme.outline.copy(alpha = 0.15f)
+                        )
+                        .fillMaxWidth()
+                        .padding(horizontal = 6.dp, vertical = 2.dp),
+                    contentAlignment = Alignment.TopEnd
+                ){
+                    Text(
+                        text = "Read",
+                        fontSize = 13.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+            }
             Column(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
@@ -380,6 +405,7 @@ fun CategoryChip(
 @Composable
 fun ArticleListItem(
     article: Article,
+    isRead: Boolean = false,
     onClick: () -> Unit
 ) {
     var isVisible by remember { mutableStateOf(false) }
@@ -405,6 +431,7 @@ fun ArticleListItem(
                 .fillMaxWidth()
                 .height(150.dp)
                 .clickable { onClick() }
+                .alpha(if (isRead) 0.6f else 1f)
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             shape = RoundedCornerShape(12.dp),
             elevation = CardDefaults.cardElevation(5.dp)
@@ -426,6 +453,25 @@ fun ArticleListItem(
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.45f))
                 )
+                if (isRead) {
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(4.dp))
+                            .background(
+                                MaterialTheme.colorScheme.outline.copy(alpha = 0.15f)
+                            )
+                            .fillMaxWidth()
+                            .padding(horizontal = 6.dp, vertical = 2.dp),
+                        contentAlignment = Alignment.TopEnd
+                    ){
+                        Text(
+                            text = "Read",
+                            fontSize = 11.sp,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
                 Text(
                     modifier = Modifier.padding(15.dp),
                     text = article.title,

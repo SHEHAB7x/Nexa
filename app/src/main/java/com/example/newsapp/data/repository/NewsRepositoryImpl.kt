@@ -3,6 +3,8 @@ package com.example.newsapp.data.repository
 import com.example.newsapp.data.local.dao.ArticleDao
 import com.example.newsapp.data.local.dao.CategoryArticleDao
 import com.example.newsapp.data.local.dao.HeadlineDao
+import com.example.newsapp.data.local.dao.ReadHistoryDao
+import com.example.newsapp.data.local.entity.ReadHistoryEntity
 import com.example.newsapp.data.mapper.categoryEntitiesToArticles
 import com.example.newsapp.data.mapper.dtosToArticles
 import com.example.newsapp.data.mapper.entitiesToArticles
@@ -26,7 +28,8 @@ class NewsRepositoryImpl @Inject constructor(
     private val api: NewsApiService,
     private val articleDao: ArticleDao,
     private val headlineDao: HeadlineDao,
-    private val categoryArticleDao: CategoryArticleDao
+    private val categoryArticleDao: CategoryArticleDao,
+    private val readHistoryDao: ReadHistoryDao
 ) : NewsRepository {
 
     override fun getHeadlines(
@@ -110,4 +113,20 @@ class NewsRepositoryImpl @Inject constructor(
 
     override fun isArticleSaved(url: String): Flow<Boolean> =
         articleDao.isArticleSaved(url)
+
+    override suspend fun markArticleAsRead(url: String) {
+        readHistoryDao.markAsRead(ReadHistoryEntity(url = url))
+    }
+
+    override fun getReadArticleUrl(): Flow<Set<String>> {
+        return readHistoryDao.getAllReadUrls().map { it.toSet() }
+    }
+
+    override fun getReadCount(): Flow<Int> {
+        return readHistoryDao.getReadCount()
+    }
+
+    override suspend fun clearReadHistory() {
+        readHistoryDao.clearHistory()
+    }
 }

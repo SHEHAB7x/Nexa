@@ -7,6 +7,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.newsapp.data.local.dao.ArticleDao
 import com.example.newsapp.data.local.dao.CategoryArticleDao
 import com.example.newsapp.data.local.dao.HeadlineDao
+import com.example.newsapp.data.local.dao.ReadHistoryDao
 import com.example.newsapp.data.local.database.AppDatabase
 import dagger.Module
 import dagger.Provides
@@ -15,8 +16,14 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-val MIGRATION_1_2 = object : Migration(1, 2){
+val MIGRATION_2_3 = object : Migration(2, 3){
     override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("""
+            CREATE TABLE IF NOT EXISTS read_history(
+            url TEXT NOT NULL PRIMARY KEY,
+            readAt INTEGER NOT NULL DEFAULT 0
+            )
+        """)
         db.execSQL("""
             CREATE TABLE IF NOT EXISTS headlines(
             url TEXT NOT NULL PRIMARY KEY,
@@ -62,9 +69,14 @@ object DatabaseModule {
             AppDatabase::class.java,
             AppDatabase.DATABASE_NAME
         )
-        .addMigrations(MIGRATION_1_2)
+        .addMigrations(MIGRATION_2_3)
         .fallbackToDestructiveMigration()
         .build()
+
+    @Provides
+    @Singleton
+    fun provideReadHistoryDao(database: AppDatabase): ReadHistoryDao =
+        database.readHistoryDao()
 
     @Provides
     @Singleton

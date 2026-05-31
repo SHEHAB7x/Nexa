@@ -10,7 +10,8 @@ data class HomeUiState(
     val isHeadlinesLoading: Boolean     = false,
     val isCategoryLoading: Boolean      = false,
     val headlinesError: String?         = null,
-    val categoryError: String?          = null
+    val categoryError: String?          = null,
+    val readArticleUrls: Set<String>    = emptySet()
 )
 
 val categories = listOf(

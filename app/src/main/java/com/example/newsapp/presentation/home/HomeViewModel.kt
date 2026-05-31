@@ -1,5 +1,6 @@
 package com.example.newsapp.presentation.home
 
+import android.R
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -46,7 +47,11 @@ class HomeViewModel @Inject constructor(
                     language,
                     country
                 )
+                repository.getReadArticleUrl().collect { urls ->
+                    _uiState.update { it.copy(readArticleUrls = urls) }
+                }
             }
+
         }
     }
 

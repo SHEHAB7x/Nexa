@@ -24,4 +24,8 @@ interface NewsRepository {
     suspend fun deleteArticle(article: Article)
     fun getSavedArticles(): Flow<List<Article>>
     fun isArticleSaved(url: String): Flow<Boolean>
+    suspend fun markArticleAsRead(url: String)
+    fun getReadArticleUrl(): Flow<Set<String>>
+    fun getReadCount(): Flow<Int>
+    suspend fun clearReadHistory()
 }
