@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.newsapp.domain.model.Article
+import com.example.newsapp.presentation.components.EmptyStateView
 import com.example.newsapp.presentation.home.ArticleListItem
 import com.example.newsapp.presentation.theme.DarkGray
 import com.example.newsapp.presentation.theme.LightGray
@@ -90,7 +91,11 @@ fun FavoritesScreen(
             }
 
             uiState.articles.isEmpty() -> {
-                EmptyFavoritesView()
+                EmptyStateView(
+                    emoji    = "🤍",
+                    title    = "No favorites yet",
+                    subtitle = "Tap the heart icon on any article\nto save it here for later"
+                )
             }
 
             else -> {
@@ -163,33 +168,5 @@ fun SwipeToDeleteItem(
         }
     ) {
         content()
-    }
-}
-
-@Composable
-fun EmptyFavoritesView() {
-    Column(
-        modifier         = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text     = "🤍",
-            fontSize = 64.sp
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text       = "No favorites yet",
-            fontSize   = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color      = MaterialTheme.colorScheme.onBackground
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text     = "Tap the heart icon on any article\nto save it here",
-            fontSize = 14.sp,
-            color    = MaterialTheme.colorScheme.outline,
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center
-        )
     }
 }

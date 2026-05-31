@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.newsapp.domain.model.Article
+import com.example.newsapp.presentation.components.EmptyStateView
 import com.example.newsapp.presentation.home.ArticleListItem
 import com.example.newsapp.presentation.home.categories
 
@@ -202,29 +203,19 @@ fun  SearchScreen(
             }
 
             uiState.query.isBlank() -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Type to search news...",
-                        color = MaterialTheme.colorScheme.outline,
-                        fontSize = 14.sp
-                    )
-                }
+                EmptyStateView(
+                    emoji    = "📰",
+                    title    = "Search for news",
+                    subtitle = "Type anything to find articles\nacross all categories"
+                )
             }
 
             uiState.articles.isEmpty() -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "No results for \"${uiState.query}\"",
-                        color = MaterialTheme.colorScheme.outline,
-                        fontSize = 14.sp
-                    )
-                }
+                EmptyStateView(
+                    emoji    = "🔍",
+                    title    = "No results found",
+                    subtitle = "Try different keywords or\nchange the category filter"
+                )
             }
 
             else -> {
