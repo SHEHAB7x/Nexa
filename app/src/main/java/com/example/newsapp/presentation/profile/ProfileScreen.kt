@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -66,47 +67,38 @@ fun ProfileScreen() {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.primary)
-                .padding(vertical = 40.dp),
+                .background(MaterialTheme.colorScheme.background),
             contentAlignment = Alignment.Center
         ) {
+            Image(
+                painter = painterResource(R.drawable.shehab),
+                contentDescription = "Shehab",
+                modifier = Modifier
+                    .blur(3.dp,1.dp)
+            )
 
-            Column(
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f)),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(88.dp)
-                        .clip(CircleShape)
-                        .background(Color.White.copy(alpha = 0.2f))
-                        .border(2.dp, Color.White.copy(alpha = 0.5f), CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "SA",
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                }
-
                 Text(
                     text = "Shehab Abdelhares",
-                    fontSize = 20.sp,
+                    fontSize = 25.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
 
                 Text(
                     text = "Android Developer",
-                    fontSize = 14.sp,
+                    fontSize = 16.sp,
                     color    = Color.White.copy(alpha = 0.85f)
                 )
 
                 Text(
                     text     = "Qena, Egypt 🇪🇬",
-                    fontSize = 13.sp,
+                    fontSize = 14.sp,
                     color    = Color.White.copy(alpha = 0.75f)
                 )
             }
