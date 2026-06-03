@@ -1,9 +1,8 @@
 package com.example.newsapp.presentation.profile
 
-import android.R
 import android.content.Intent
 import android.net.Uri
-import android.widget.Space
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,24 +23,29 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.newsapp.BuildConfig
+import com.example.newsapp.R
+import com.example.newsapp.presentation.components.AppIcons
+import com.example.newsapp.presentation.theme.NewsAppTheme
+import com.google.firebase.BuildConfig
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -66,6 +70,7 @@ fun ProfileScreen() {
                 .padding(vertical = 40.dp),
             contentAlignment = Alignment.Center
         ) {
+
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -100,7 +105,7 @@ fun ProfileScreen() {
                 )
 
                 Text(
-                    text     = "Cairo, Egypt 🇪🇬",
+                    text     = "Qena, Egypt 🇪🇬",
                     fontSize = 13.sp,
                     color    = Color.White.copy(alpha = 0.75f)
                 )
@@ -111,14 +116,14 @@ fun ProfileScreen() {
 
         ProfileSectionHeader(title = "Connect")
         ProfileLinkItem(
-            icon       = Icons.Default.Info,
+            icon       = AppIcons.GitHub,
             label      = "GitHub",
             value      = "SHEHAB7x",
             tint       = Color(0xFF333333),
             onClick    = { openUrl("https://github.com/SHEHAB7x") }
         )
         ProfileLinkItem(
-            icon       = Icons.Default.Info,
+            icon       = AppIcons.LinkedIn,
             label      = "LinkedIn",
             value      = "shehab0x",
             tint       = Color(0xFF0077B5),
@@ -126,7 +131,7 @@ fun ProfileScreen() {
         )
 
         ProfileLinkItem(
-            icon       = Icons.Default.Email,
+            icon       = AppIcons.Email,
             label      = "Email",
             value      = "sabdalhares@gmail.com",
             tint       = MaterialTheme.colorScheme.primary,
@@ -190,7 +195,7 @@ fun ProfileScreen() {
             textAlign = TextAlign.Center,
             modifier  = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 32.dp)
+                .padding(bottom = 110.dp)
         )
     }
 }
@@ -258,7 +263,7 @@ fun ProfileInfoItem(
 
 @Composable
 fun ProfileLinkItem(
-    icon: ImageVector,
+    icon: Painter,
     label: String,
     value: String,
     tint: Color,
@@ -272,6 +277,7 @@ fun ProfileLinkItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+
         Box(
             modifier = Modifier
                 .size(40.dp)
@@ -280,12 +286,13 @@ fun ProfileLinkItem(
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                imageVector        = icon,
+                painter        = icon,
                 contentDescription = null,
                 tint               = tint,
                 modifier           = Modifier.size(22.dp)
             )
         }
+
 
         Column(modifier = Modifier.weight(1f)) {
             Text(
@@ -302,7 +309,7 @@ fun ProfileLinkItem(
         }
 
         Icon(
-            imageVector        = Icons.Default.Info,
+            painter        = AppIcons.OpenInNew,
             contentDescription = null,
             tint               = MaterialTheme.colorScheme.outline,
             modifier           = Modifier.size(16.dp)
@@ -323,4 +330,12 @@ fun ProfileSectionHeader(title: String) {
             bottom = 4.dp
         )
     )
+}
+
+@Preview
+@Composable
+fun ProfileScreenPreview(){
+    NewsAppTheme() {
+        ProfileScreen()
+    }
 }
