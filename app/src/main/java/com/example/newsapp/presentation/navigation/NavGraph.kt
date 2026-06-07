@@ -17,6 +17,7 @@ import com.example.newsapp.presentation.search.SearchScreen
 import com.example.newsapp.presentation.settings.SettingsScreen
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import com.example.newsapp.presentation.history.ReadingHistoryScreen
 import com.example.newsapp.presentation.profile.ProfileScreen
 
 @Composable
@@ -87,7 +88,10 @@ fun NavGraph(
 
         composable(Screen.Settings.route){
             SettingsScreen(
-                onBackClick = { navController.popBackStack() }
+                onBackClick = { navController.popBackStack() },
+                onHistoryClick = {
+                    navController.navigate(Screen.ReadingHistory.route)
+                }
             )
         }
 
@@ -122,6 +126,16 @@ fun NavGraph(
 
         composable(Screen.Profile.route){
             ProfileScreen()
+        }
+
+        composable(Screen.ReadingHistory.route) {
+            ReadingHistoryScreen(
+                onArticleClick = { article ->
+                    sharedViewModel.setArticle(article)
+                    navController.navigate(Screen.ArticleDetails.route)
+                },
+                onBackClick = { navController.popBackStack() }
+            )
         }
     }
 }

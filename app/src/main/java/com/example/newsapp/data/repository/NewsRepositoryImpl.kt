@@ -19,6 +19,7 @@ import com.example.newsapp.domain.repository.NewsRepository
 import com.example.newsapp.domain.util.Resource
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -128,5 +129,16 @@ class NewsRepositoryImpl @Inject constructor(
 
     override suspend fun clearReadHistory() {
         readHistoryDao.clearHistory()
+    }
+
+    override fun getCachedArticles(): Flow<List<Article>> {
+        return combine(
+            headlineDao.getHeadlines(),
+            categoryArticleDao.getAllArticles()
+        ) { headlines, categoryArticles ->
+            val headlineArticles  = headlines.headlinesToArticles()
+            val categoryArticlesList = categoryArticles.categoryEntitiesToArticles()
+            (headlineArticles + categoryArticlesList).distinctBy { it.url }
+        }
     }
 }

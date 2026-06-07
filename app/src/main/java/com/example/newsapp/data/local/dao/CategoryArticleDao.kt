@@ -17,4 +17,7 @@ interface CategoryArticleDao {
 
     @Query("DELETE FROM category_articles WHERE category = :category")
     suspend fun clearCategory(category: String)
+
+    @Query("SELECT * FROM category_articles")
+    fun getAllArticles(): Flow<List<CategoryArticleEntity>>
 }

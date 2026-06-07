@@ -27,6 +27,7 @@ import com.example.newsapp.presentation.theme.*
 @Composable
 fun SettingsScreen(
     onBackClick: () -> Unit,
+    onHistoryClick: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -111,6 +112,14 @@ fun SettingsScreen(
                     title    = "News Country",
                     subtitle = "${uiState.selectedCountry.flag}  ${uiState.selectedCountry.displayName}",
                     onClick  = viewModel::showCountryDialog
+                )
+            }
+            item {
+                SettingsClickableItem(
+                    icon     = Icons.Default.Face, // History
+                    title    = "Reading History",
+                    subtitle = "View articles you have opened",
+                    onClick  = onHistoryClick
                 )
             }
 

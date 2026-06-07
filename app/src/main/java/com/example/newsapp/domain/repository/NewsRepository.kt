@@ -28,4 +28,5 @@ interface NewsRepository {
     fun getReadArticleUrl(): Flow<Set<String>>
     fun getReadCount(): Flow<Int>
     suspend fun clearReadHistory()
+    fun getCachedArticles(): Flow<List<Article>>
 }
