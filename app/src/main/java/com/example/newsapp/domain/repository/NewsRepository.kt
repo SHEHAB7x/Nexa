@@ -29,4 +29,9 @@ interface NewsRepository {
     fun getReadCount(): Flow<Int>
     suspend fun clearReadHistory()
     fun getCachedArticles(): Flow<List<Article>>
+    fun getPagedArticles(
+        category: NewsCategory,
+        language: String,
+        country: String
+    ): Flow<PagingData<Article>>
 }

@@ -1,5 +1,6 @@
 package com.example.newsapp.data.repository
 
+import androidx.paging.PagingData
 import com.example.newsapp.data.local.dao.ArticleDao
 import com.example.newsapp.data.local.dao.CategoryArticleDao
 import com.example.newsapp.data.local.dao.HeadlineDao
@@ -140,5 +141,13 @@ class NewsRepositoryImpl @Inject constructor(
             val categoryArticlesList = categoryArticles.categoryEntitiesToArticles()
             (headlineArticles + categoryArticlesList).distinctBy { it.url }
         }
+    }
+
+    override fun getPagedArticles(
+        category: NewsCategory,
+        language: String,
+        country: String
+    ): Flow<PagingData<Article>> {
+
     }
 }

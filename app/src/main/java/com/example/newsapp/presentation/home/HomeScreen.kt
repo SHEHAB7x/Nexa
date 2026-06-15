@@ -63,6 +63,7 @@ fun HomeScreen(
     onArticleClick: (Article) -> Unit,
     onSearchClick: () -> Unit,
     onSettingsClick: () -> Unit,
+    onSeeAllClick: (NewsCategory) -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -72,6 +73,7 @@ fun HomeScreen(
         onSearchClick  = onSearchClick,
         onSettingsClick = onSettingsClick,
         onCategorySelected = viewModel::onCategorySelected,
+        onSeeAllClick = onSeeAllClick,
         onRefresh = viewModel::refresh
     )
 }
@@ -84,6 +86,7 @@ fun HomeScreenContent(
     onSearchClick: () -> Unit,
     onSettingsClick: () -> Unit,
     onCategorySelected: (NewsCategory) -> Unit,
+    onSeeAllClick: (NewsCategory) -> Unit,
     onRefresh: () -> Unit
 ) {
     val isRefreshing = uiState.isHeadlinesLoading || uiState.isCategoryLoading
@@ -109,7 +112,7 @@ fun HomeScreenContent(
             item {
                 SectionHeader(
                     title = "Latest News",
-                    onSeeAll = {}
+                    onSeeAll = { onSeeAllClick(uiState.selectedCategory) }
                 )
             }
             item {

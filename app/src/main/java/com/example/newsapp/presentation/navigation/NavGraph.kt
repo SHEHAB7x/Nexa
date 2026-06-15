@@ -17,6 +17,9 @@ import com.example.newsapp.presentation.search.SearchScreen
 import com.example.newsapp.presentation.settings.SettingsScreen
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+import com.example.newsapp.presentation.categorydetail.CategoryDetailScreen
 import com.example.newsapp.presentation.history.ReadingHistoryScreen
 import com.example.newsapp.presentation.profile.ProfileScreen
 
@@ -82,6 +85,12 @@ fun NavGraph(
                 },
                 onSettingsClick = {
                     navController.navigate(Screen.Settings.route)
+                },
+                onSeeAllClick = {
+                        category ->
+                    navController.navigate(
+                        Screen.CategoryDetail.createRoute(category.label)
+                    )
                 }
             )
         }
@@ -130,6 +139,21 @@ fun NavGraph(
 
         composable(Screen.ReadingHistory.route) {
             ReadingHistoryScreen(
+                onArticleClick = { article ->
+                    sharedViewModel.setArticle(article)
+                    navController.navigate(Screen.ArticleDetails.route)
+                },
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route     = Screen.CategoryDetail.route,
+            arguments = listOf(
+                navArgument("categoryLabel") { type = NavType.StringType }
+            )
+        ) {
+            CategoryDetailScreen(
                 onArticleClick = { article ->
                     sharedViewModel.setArticle(article)
                     navController.navigate(Screen.ArticleDetails.route)
