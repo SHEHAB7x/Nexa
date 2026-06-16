@@ -11,18 +11,22 @@ interface NewsApiService {
     suspend fun getAppleNews(
         @Query("q")       q: String = "apple",
         @Query("from")    from: String = "2026-04-04",
-        @Query("to")      to: String = "2026-04-04",
+        @Query("to")      to: String = "2026-06-04",
         @Query("sortBy")  sortBy: String = "popularity",
         @Query("language") language: String = "en",
+        @Query("page") page: Int = 1,
+        @Query("pageSize") pageSize: Int = 20,
         @Query("apiKey")  apiKey: String = API_KEY
     ): NewsResponseDto
 
     @GET("v2/everything")
     suspend fun getTeslaNews(
         @Query("q")       q: String = "tesla",
-        @Query("from")    from: String = "2026-03-08",
+        @Query("from")    from: String = "2026-05-08",
         @Query("sortBy")  sortBy: String = "publishedAt",
         @Query("language") language: String = "en",
+        @Query("page") page: Int = 1,
+        @Query("pageSize") pageSize: Int = 20,
         @Query("apiKey")  apiKey: String = API_KEY
     ): NewsResponseDto
 
@@ -30,6 +34,8 @@ interface NewsApiService {
     suspend fun getBusinessNews(
         @Query("country")  country: String = "us",
         @Query("category") category: String = "business",
+        @Query("page") page: Int = 1,
+        @Query("pageSize") pageSize: Int = 20,
         @Query("apiKey")   apiKey: String = API_KEY
     ): NewsResponseDto
 
@@ -37,12 +43,16 @@ interface NewsApiService {
     suspend fun getWsjNews(
         @Query("domains") domains: String = "wsj.com",
         @Query("language") language: String = "en",
+        @Query("page") page: Int = 1,
+        @Query("pageSize") pageSize: Int = 20,
         @Query("apiKey")  apiKey: String = API_KEY
     ): NewsResponseDto
 
     @GET("v2/top-headlines")
     suspend fun getTechCrunchNews(
         @Query("sources") sources: String = "techcrunch",
+        @Query("page") page: Int = 1,
+        @Query("pageSize") pageSize: Int = 20,
         @Query("apiKey")  apiKey: String = API_KEY
     ): NewsResponseDto
 

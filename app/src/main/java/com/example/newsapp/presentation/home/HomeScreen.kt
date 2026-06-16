@@ -1,6 +1,5 @@
 package com.example.newsapp.presentation.home
 
-import android.graphics.Paint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
@@ -41,21 +40,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemKey
 import coil.compose.AsyncImage
 import com.example.newsapp.domain.model.Article
 import com.example.newsapp.domain.model.NewsCategory
 import com.example.newsapp.domain.model.Source
 import com.example.newsapp.presentation.components.ArticleListItemShimmer
 import com.example.newsapp.presentation.components.HeadlineCardShimmer
-import com.example.newsapp.presentation.theme.*
 import com.example.newsapp.utils.ReadTimeCalculator
 
 @Composable
