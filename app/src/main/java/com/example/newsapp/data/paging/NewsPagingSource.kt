@@ -7,8 +7,6 @@ import com.example.newsapp.data.mapper.dtosToArticles
 import com.example.newsapp.data.remote.api.NewsApiService
 import com.example.newsapp.domain.model.Article
 import com.example.newsapp.domain.model.NewsCategory
-import retrofit2.HttpException
-
 class NewsPagingSource(
     private val api: NewsApiService,
     private val category: NewsCategory,
